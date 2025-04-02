@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb';
+import { Parser } from 'json2csv';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -30,6 +31,35 @@ export default async function handler(req, res) {
     } catch (error) {
       console.error('Error fetching assessments:', error);
       res.status(500).json({ message: 'Error fetching assessments' });
+    }
+  } else if (req.method === 'GET' && req.query.export === 'true') {
+    try {
+      const client = await MongoClient.connect(MONGODB_URI);
+      const db = client.db('mna-assessment');
+      const collection = db.collection('assessments');
+
+      const assessments = await collection.find({}).toArray();
+      await client.close();
+
+      // 準備CSV數據
+      const fields = [
+        'name',
+        'gender',
+        'dob',
+        'totalScore',
+        'status',
+        'createdAt'
+      ];
+
+      const json2csvParser = new Parser({ fields });
+      const csv = json2csvParser.parse(assessments);
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename=mna-assessment-report.csv');
+      res.status(200).send(csv);
+    } catch (error) {
+      console.error('Error exporting assessments:', error);
+      res.status(500).json({ message: 'Error exporting assessments' });
     }
   } else {
     res.setHeader('Allow', ['POST', 'GET']);
