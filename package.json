@@ -1,0 +1,12 @@
+{
+  "name": "mna-assessment",
+  "version": "1.0.0",
+  "description": "MNA迷你營養評估表",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel deploy --prod"
+  },
+  "dependencies": {
+    "vercel": "^33.5.1"
+  }
+} 
