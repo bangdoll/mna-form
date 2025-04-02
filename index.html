@@ -246,13 +246,16 @@
     const form = document.getElementById('mnaForm');
     const result = document.getElementById('result');
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const formData = new FormData(form);
       let total = 0;
+      const answers = {};
+      
       for (let [key, value] of formData.entries()) {
         if (!isNaN(parseFloat(value))) {
           total += parseFloat(value);
+          answers[key] = parseFloat(value);
         }
       }
       
@@ -269,13 +272,48 @@
         className = 'result-good';
       }
 
-      result.className = 'section result-section ' + className;
-      result.innerHTML = `
-        <h2>評估結果</h2>
-        <p>總分：${total} 分</p>
-        <p>${status}</p>
-        <p>建議：${getRecommendation(total)}</p>
-      `;
+      // 準備要發送到後端的數據
+      const assessmentData = {
+        name: formData.get('name'),
+        gender: formData.get('gender'),
+        dob: formData.get('dob'),
+        answers: answers,
+        totalScore: total,
+        status: status.replace(/[⚠️✅]/g, '').trim()
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/api/assessments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(assessmentData)
+        });
+
+        if (!response.ok) {
+          throw new Error('提交失敗');
+        }
+
+        result.className = 'section result-section ' + className;
+        result.innerHTML = `
+          <h2>評估結果</h2>
+          <p>總分：${total} 分</p>
+          <p>${status}</p>
+          <p>建議：${getRecommendation(total)}</p>
+          <p style="color: green;">✅ 數據已成功保存</p>
+        `;
+      } catch (error) {
+        console.error('Error:', error);
+        result.className = 'section result-section result-bad';
+        result.innerHTML = `
+          <h2>評估結果</h2>
+          <p>總分：${total} 分</p>
+          <p>${status}</p>
+          <p>建議：${getRecommendation(total)}</p>
+          <p style="color: red;">❌ 保存數據時發生錯誤</p>
+        `;
+      }
     });
 
     function getRecommendation(score) {
