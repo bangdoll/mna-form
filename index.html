@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MNA迷你營養評估表</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .section {
+      margin-top: 30px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #34495e;
+    }
+    .question {
+      margin-top: 20px;
+      padding: 15px;
+      border-left: 4px solid #3498db;
+      background-color: #f8f9fa;
+    }
+    .options label {
+      font-weight: normal;
+      margin: 8px 0;
+      display: block;
+    }
+    input[type="text"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    input[type="submit"] {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    input[type="submit"]:hover {
+      background-color: #2980b9;
+    }
+    .result-section {
+      text-align: center;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+    .result-good {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .result-risk {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .result-bad {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <h1>MNA迷你營養評估表</h1>
+
+  <form id="mnaForm">
+    <div class="section">
+      <h2>基本資料</h2>
+      <label>姓名：</label>
+      <input type="text" name="name" required />
+      <label>性別：</label>
+      <select name="gender" required>
+        <option value="male">男</option>
+        <option value="female">女</option>
+      </select>
+      <label>出生日期：</label>
+      <input type="date" name="dob" required />
+    </div>
+
+    <div class="section">
+      <h2>A. 營養篩檢</h2>
+
+      <div class="question">
+        <label>1. 過去三個月是否進食量減少？</label>
+        <div class="options">
+          <label><input type="radio" name="appetite" value="0" required /> 嚴重減少 (0分)</label>
+          <label><input type="radio" name="appetite" value="1" /> 中度減少 (1分)</label>
+          <label><input type="radio" name="appetite" value="2" /> 無變化 (2分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>2. 近三個月體重變化：</label>
+        <div class="options">
+          <label><input type="radio" name="weight_change" value="0" required /> 減輕＞3公斤 (0分)</label>
+          <label><input type="radio" name="weight_change" value="1" /> 不知道 (1分)</label>
+          <label><input type="radio" name="weight_change" value="2" /> 減輕1~3公斤 (2分)</label>
+          <label><input type="radio" name="weight_change" value="3" /> 無改變 (3分)</label>
+          <label><input type="radio" name="weight_change" value="4" /> 增加 (4分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>3. 活動能力：</label>
+        <div class="options">
+          <label><input type="radio" name="mobility" value="0" required /> 需要臥床或輪椅 (0分)</label>
+          <label><input type="radio" name="mobility" value="1" /> 可以下床/離開輪椅，但不能外出 (1分)</label>
+          <label><input type="radio" name="mobility" value="2" /> 可以外出 (2分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>4. 過去三個月內是否服用超過3種處方藥？</label>
+        <div class="options">
+          <label><input type="radio" name="medication" value="0" required /> 是 (0分)</label>
+          <label><input type="radio" name="medication" value="1" /> 否 (1分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>5. 過去三個月內是否有壓力性潰瘍或皮膚潰瘍？</label>
+        <div class="options">
+          <label><input type="radio" name="pressure_ulcers" value="0" required /> 是 (0分)</label>
+          <label><input type="radio" name="pressure_ulcers" value="1" /> 否 (1分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>6. 每日進食次數：</label>
+        <div class="options">
+          <label><input type="radio" name="meals" value="0" required /> 1餐 (0分)</label>
+          <label><input type="radio" name="meals" value="1" /> 2餐 (1分)</label>
+          <label><input type="radio" name="meals" value="2" /> 3餐 (2分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>7. 每日攝取兩份以上的乳製品？</label>
+        <div class="options">
+          <label><input type="radio" name="dairy" value="0" required /> 否 (0分)</label>
+          <label><input type="radio" name="dairy" value="0.5" /> 是 (0.5分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>8. 每週攝取兩份以上的豆類或蛋？</label>
+        <div class="options">
+          <label><input type="radio" name="protein" value="0" required /> 否 (0分)</label>
+          <label><input type="radio" name="protein" value="0.5" /> 是 (0.5分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>9. 每日進食水果或蔬菜？</label>
+        <div class="options">
+          <label><input type="radio" name="fruits_vegetables" value="0" required /> 否 (0分)</label>
+          <label><input type="radio" name="fruits_vegetables" value="0.5" /> 是 (0.5分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>10. 每日飲水量（水、果汁、咖啡、茶等）：</label>
+        <div class="options">
+          <label><input type="radio" name="fluid" value="0" required /> 少於3杯 (0分)</label>
+          <label><input type="radio" name="fluid" value="0.5" /> 3-5杯 (0.5分)</label>
+          <label><input type="radio" name="fluid" value="1" /> 超過5杯 (1分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>11. 進食方式：</label>
+        <div class="options">
+          <label><input type="radio" name="feeding_mode" value="0" required /> 需要協助 (0分)</label>
+          <label><input type="radio" name="feeding_mode" value="1" /> 自行進食有些困難 (1分)</label>
+          <label><input type="radio" name="feeding_mode" value="2" /> 自行進食無困難 (2分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>12. 自覺營養狀況：</label>
+        <div class="options">
+          <label><input type="radio" name="self_assessment" value="0" required /> 自覺營養狀況不佳 (0分)</label>
+          <label><input type="radio" name="self_assessment" value="1" /> 不確定 (1分)</label>
+          <label><input type="radio" name="self_assessment" value="2" /> 自覺營養狀況良好 (2分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>13. 與同年齡相比，自覺健康狀況：</label>
+        <div class="options">
+          <label><input type="radio" name="health_comparison" value="0" required /> 較差 (0分)</label>
+          <label><input type="radio" name="health_comparison" value="0.5" /> 不知道 (0.5分)</label>
+          <label><input type="radio" name="health_comparison" value="1" /> 一樣好 (1分)</label>
+          <label><input type="radio" name="health_comparison" value="2" /> 較好 (2分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>14. 上臂中點臂圍（AC）（公分）：</label>
+        <div class="options">
+          <label><input type="radio" name="ac" value="0" required /> AC < 21 (0分)</label>
+          <label><input type="radio" name="ac" value="0.5" /> 21 ≤ AC ≤ 22 (0.5分)</label>
+          <label><input type="radio" name="ac" value="1" /> AC ≥ 22 (1分)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>15. 小腿圍（CC）（公分）：</label>
+        <div class="options">
+          <label><input type="radio" name="cc" value="0" required /> CC < 31 (0分)</label>
+          <label><input type="radio" name="cc" value="1" /> CC ≥ 31 (1分)</label>
+        </div>
+      </div>
+    </div>
+
+    <input type="submit" value="送出並計算總分" />
+  </form>
+
+  <div id="result" class="section result-section"></div>
+
+  <script>
+    const form = document.getElementById('mnaForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      let total = 0;
+      for (let [key, value] of formData.entries()) {
+        if (!isNaN(parseFloat(value))) {
+          total += parseFloat(value);
+        }
+      }
+      
+      let status = '';
+      let className = '';
+      if (total < 17) {
+        status = '⚠️ 營養不良';
+        className = 'result-bad';
+      } else if (total < 24) {
+        status = '⚠️ 有營養不良風險';
+        className = 'result-risk';
+      } else {
+        status = '✅ 營養狀況良好';
+        className = 'result-good';
+      }
+
+      result.className = 'section result-section ' + className;
+      result.innerHTML = `
+        <h2>評估結果</h2>
+        <p>總分：${total} 分</p>
+        <p>${status}</p>
+        <p>建議：${getRecommendation(total)}</p>
+      `;
+    });
+
+    function getRecommendation(score) {
+      if (score < 17) {
+        return '建議立即進行營養介入，並定期追蹤營養狀況。';
+      } else if (score < 24) {
+        return '建議進行營養諮詢，並定期評估營養狀況。';
+      } else {
+        return '建議維持目前的飲食習慣，定期進行營養評估。';
+      }
+    }
+  </script>
+</body>
+</html>
