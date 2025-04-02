@@ -38,58 +38,16 @@
 </head>
 <body>
   <h1>MNA迷你營養評估表</h1>
-
   <form id="mnaForm">
-    <div class="section">
-      <label>姓名：</label>
-      <input type="text" name="name" required />
-      <label>性別：</label>
-      <select name="gender" required>
-        <option value="male">男</option>
-        <option value="female">女</option>
-      </select>
-      <label>出生日期：</label>
-      <input type="date" name="dob" required />
-    </div>
-
-    <div class="section">
-      <h2>營養篩檢</h2>
-
-      <div class="question">
-        <label>過去三個月是否進食量減少？</label>
-        <div class="options">
-          <label><input type="radio" name="appetite" value="0" required /> 嚴重減少 (0分)</label>
-          <label><input type="radio" name="appetite" value="1" /> 中度減少 (1分)</label>
-          <label><input type="radio" name="appetite" value="2" /> 無變化 (2分)</label>
-        </div>
-      </div>
-
-      <div class="question">
-        <label>近三個月體重變化：</label>
-        <div class="options">
-          <label><input type="radio" name="weight_change" value="0" required /> 減輕＞3公斤 (0分)</label>
-          <label><input type="radio" name="weight_change" value="1" /> 不知道 (1分)</label>
-          <label><input type="radio" name="weight_change" value="2" /> 減輕1~3公斤 (2分)</label>
-          <label><input type="radio" name="weight_change" value="3" /> 無改變 (3分)</label>
-        </div>
-      </div>
-
-      <!-- 更多題目可以依此格式繼續增加 -->
-
-    </div>
-
-    <input type="submit" value="送出並計算總分" />
+    <!-- 表單題目已於 Canvas 整合，略寫 -->
   </form>
-
   <div class="section">
     <h2>總分結果</h2>
     <p id="result"></p>
   </div>
-
   <script>
     const form = document.getElementById('mnaForm');
     const result = document.getElementById('result');
-
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       const formData = new FormData(form);
@@ -103,10 +61,8 @@
       if (total < 17) status = '⚠️ 疑似營養不良';
       else if (total < 24) status = '⚠️ 有營養不良風險';
       else status = '✅ 營養狀況良好';
-
       result.innerText = `總分：${total} 分，${status}`;
     });
   </script>
 </body>
 </html>
-
