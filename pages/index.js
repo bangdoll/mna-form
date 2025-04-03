@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 export default function Home() {
   const [formData, setFormData] = useState({
+    isAnonymous: true, // 預設為匿名
     name: '',
     gender: 'male',
     dob: '',
@@ -180,19 +181,26 @@ export default function Home() {
       const totalScore = calculateScore();
       const status = determineStatus(totalScore);
       
-      const assessmentData = {
+      // 如果是匿名，則清空個人資料
+      const submissionData = {
         ...formData,
         totalScore,
         status,
         createdAt: new Date().toISOString()
       };
 
+      if (formData.isAnonymous) {
+        submissionData.name = '匿名';
+        submissionData.gender = 'unknown';
+        submissionData.dob = null;
+      }
+
       const response = await fetch('/api/assessments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(assessmentData)
+        body: JSON.stringify(submissionData)
       });
 
       if (!response.ok) {
@@ -201,6 +209,7 @@ export default function Home() {
 
       setSuccess(true);
       setFormData({
+        isAnonymous: true,
         name: '',
         gender: 'male',
         dob: '',
@@ -269,44 +278,70 @@ export default function Home() {
         <form onSubmit={handleSubmit}>
           <div className="card mb-4">
             <div className="card-body">
-              <h5 className="card-title">基本資料</h5>
-              <div className="row">
-                <div className="col-md-4 mb-3">
-                  <label className="form-label">姓名</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="col-md-4 mb-3">
-                  <label className="form-label">性別</label>
-                  <select
-                    className="form-select"
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="male">男</option>
-                    <option value="female">女</option>
-                  </select>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <label className="form-label">出生日期</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
+              <div className="form-check mb-3">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="isAnonymous"
+                  checked={formData.isAnonymous}
+                  onChange={(e) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      isAnonymous: e.target.checked,
+                      // 如果選擇匿名，清空個人資料
+                      ...(e.target.checked ? {
+                        name: '',
+                        gender: 'male',
+                        dob: ''
+                      } : {})
+                    }));
+                  }}
+                />
+                <label className="form-check-label" htmlFor="isAnonymous">
+                  我想要匿名填寫（不會記錄姓名、性別和出生日期）
+                </label>
               </div>
+
+              <h5 className="card-title">基本資料</h5>
+              {!formData.isAnonymous && (
+                <div className="row">
+                  <div className="col-md-4 mb-3">
+                    <label className="form-label">姓名</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required={!formData.isAnonymous}
+                    />
+                  </div>
+                  <div className="col-md-4 mb-3">
+                    <label className="form-label">性別</label>
+                    <select
+                      className="form-select"
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleInputChange}
+                      required={!formData.isAnonymous}
+                    >
+                      <option value="male">男</option>
+                      <option value="female">女</option>
+                    </select>
+                  </div>
+                  <div className="col-md-4 mb-3">
+                    <label className="form-label">出生日期</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      name="dob"
+                      value={formData.dob}
+                      onChange={handleInputChange}
+                      required={!formData.isAnonymous}
+                    />
+                  </div>
+                </div>
+              )}
               <div className="row">
                 <div className="col-md-4 mb-3">
                   <label className="form-label">體重(公斤)</label>

@@ -66,20 +66,28 @@ export default function Statistics() {
         return acc;
       }, {});
 
-      // 性別分布
+      // 性別分布（排除匿名數據）
       const genderDistribution = assessments.reduce((acc, assessment) => {
-        const gender = assessment.gender === 'male' ? '男性' : '女性';
-        acc[gender] = (acc[gender] || 0) + 1;
+        if (assessment.gender === 'unknown') {
+          acc['未提供'] = (acc['未提供'] || 0) + 1;
+        } else {
+          const gender = assessment.gender === 'male' ? '男性' : '女性';
+          acc[gender] = (acc[gender] || 0) + 1;
+        }
         return acc;
       }, {});
 
-      // 年齡分布
+      // 年齡分布（排除匿名數據）
       const ageDistribution = assessments.reduce((acc, assessment) => {
-        const birthDate = new Date(assessment.dob);
-        const age = new Date().getFullYear() - birthDate.getFullYear();
-        const ageGroup = Math.floor(age / 10) * 10;
-        const key = `${ageGroup}-${ageGroup + 9}歲`;
-        acc[key] = (acc[key] || 0) + 1;
+        if (assessment.dob) {
+          const birthDate = new Date(assessment.dob);
+          const age = new Date().getFullYear() - birthDate.getFullYear();
+          const ageGroup = Math.floor(age / 10) * 10;
+          const key = `${ageGroup}-${ageGroup + 9}歲`;
+          acc[key] = (acc[key] || 0) + 1;
+        } else {
+          acc['未提供'] = (acc['未提供'] || 0) + 1;
+        }
         return acc;
       }, {});
 
@@ -93,6 +101,8 @@ export default function Statistics() {
           else if (bmi < 24) acc['正常'] = (acc['正常'] || 0) + 1;
           else if (bmi < 27) acc['過重'] = (acc['過重'] || 0) + 1;
           else acc['肥胖'] = (acc['肥胖'] || 0) + 1;
+        } else {
+          acc['資料不完整'] = (acc['資料不完整'] || 0) + 1;
         }
         return acc;
       }, {});
@@ -460,6 +470,9 @@ export default function Statistics() {
             <div className="card mb-4">
               <div className="card-body">
                 <h5 className="card-title">詳細數據</h5>
+                <div className="alert alert-info">
+                  註：部分統計資料可能包含匿名提交的數據，個人資訊（如性別、年齡）統計僅計入有提供資料的評估。
+                </div>
                 <div className="table-responsive">
                   <table className="table">
                     <thead>
