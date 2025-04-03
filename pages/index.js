@@ -7,22 +7,37 @@ export default function Home() {
     name: '',
     gender: 'male',
     dob: '',
+    weight: '',
+    height: '',
+    kneeHeight: '',
     answers: {
-      appetite: '',
-      weight_change: '',
-      mobility: '',
-      medication: '',
-      pressure_ulcers: '',
-      meals: '',
-      dairy: '',
-      protein: '',
-      fruits_vegetables: '',
-      fluid: '',
-      feeding_mode: '',
-      self_assessment: '',
-      health_comparison: '',
-      ac: '',
-      cc: ''
+      // 營養篩檢
+      appetite: '', // 食慾問題
+      weight_change: '', // 體重變化
+      mobility: '', // 行動力
+      stress: '', // 精神壓力或急性疾病
+      neuro: '', // 神經精神問題
+      bmi: '', // BMI
+      
+      // 一般評估
+      living: '', // 獨立生活
+      medication: '', // 處方藥
+      pressure_ulcers: '', // 褥瘡
+      meals: '', // 完整餐食
+      
+      // 蛋白質攝取
+      dairy: '', // 乳製品
+      legumes: '', // 豆類或蛋類
+      meat: '', // 肉類
+      
+      // 其他評估
+      vegetables: '', // 蔬菜水果
+      fluid: '', // 液體攝取
+      feeding_mode: '', // 進食形式
+      nutrition_problem: '', // 營養問題
+      health_comparison: '', // 健康狀況比較
+      mac: '', // 臂中圍
+      cc: '' // 小腿圍
     }
   });
 
@@ -53,46 +68,105 @@ export default function Home() {
     let totalScore = 0;
     const answers = formData.answers;
 
-    // A. 食慾減退
+    // 營養篩檢 (滿分14分)
+    // 1. 食慾問題
     if (answers.appetite === 'severe') totalScore += 0;
     else if (answers.appetite === 'moderate') totalScore += 1;
     else if (answers.appetite === 'none') totalScore += 2;
 
-    // B. 體重減輕
+    // 2. 體重變化
     if (answers.weight_change === 'severe') totalScore += 0;
+    else if (answers.weight_change === 'unknown') totalScore += 1;
     else if (answers.weight_change === 'moderate') totalScore += 2;
     else if (answers.weight_change === 'none') totalScore += 3;
 
-    // C. 活動能力
+    // 3. 行動力
     if (answers.mobility === 'bed') totalScore += 0;
-    else if (answers.mobility === 'indoor') totalScore += 1;
-    else if (answers.mobility === 'outdoor') totalScore += 2;
+    else if (answers.mobility === 'limited') totalScore += 1;
+    else if (answers.mobility === 'normal') totalScore += 2;
 
-    // D. 精神壓力或急性疾病
-    if (answers.medication === 'yes') totalScore += 0;
-    else if (answers.medication === 'no') totalScore += 2;
+    // 4. 精神壓力或急性疾病
+    if (answers.stress === 'yes') totalScore += 0;
+    else if (answers.stress === 'no') totalScore += 2;
 
-    // E. 神經心理問題
-    if (answers.pressure_ulcers === 'severe') totalScore += 0;
-    else if (answers.pressure_ulcers === 'moderate') totalScore += 1;
-    else if (answers.pressure_ulcers === 'none') totalScore += 2;
+    // 5. 神經精神問題
+    if (answers.neuro === 'severe') totalScore += 0;
+    else if (answers.neuro === 'mild') totalScore += 1;
+    else if (answers.neuro === 'none') totalScore += 2;
 
-    // F. BMI
-    const ac = parseFloat(answers.ac);
-    const cc = parseFloat(answers.cc);
-    if (ac < 21) totalScore += 0;
-    else if (ac <= 22) totalScore += 0.5;
+    // 6. BMI
+    if (answers.bmi === 'low') totalScore += 0;
+    else if (answers.bmi === 'medium_low') totalScore += 1;
+    else if (answers.bmi === 'medium_high') totalScore += 2;
+    else if (answers.bmi === 'high') totalScore += 3;
+
+    // 一般評估 (滿分16分)
+    // 7. 獨立生活
+    if (answers.living === 'yes') totalScore += 1;
+    else if (answers.living === 'no') totalScore += 0;
+
+    // 8. 處方藥
+    if (answers.medication === 'yes') totalScore += 1;
+    else if (answers.medication === 'no') totalScore += 0;
+
+    // 9. 褥瘡
+    if (answers.pressure_ulcers === 'yes') totalScore += 1;
+    else if (answers.pressure_ulcers === 'no') totalScore += 0;
+
+    // 10. 完整餐食
+    if (answers.meals === 'one') totalScore += 0;
+    else if (answers.meals === 'two') totalScore += 1;
+    else if (answers.meals === 'three') totalScore += 2;
+
+    // 11. 蛋白質攝取
+    let proteinScore = 0;
+    if (answers.dairy === 'yes') proteinScore += 1;
+    if (answers.legumes === 'yes') proteinScore += 1;
+    if (answers.meat === 'yes') proteinScore += 1;
+    if (proteinScore <= 1) totalScore += 0;
+    else if (proteinScore === 2) totalScore += 0.5;
     else totalScore += 1;
 
-    if (cc < 31) totalScore += 0;
-    else totalScore += 1;
+    // 12. 蔬菜水果
+    if (answers.vegetables === 'yes') totalScore += 1;
+    else if (answers.vegetables === 'no') totalScore += 0;
+
+    // 13. 液體攝取
+    if (answers.fluid === 'low') totalScore += 0;
+    else if (answers.fluid === 'medium') totalScore += 0.5;
+    else if (answers.fluid === 'high') totalScore += 1;
+
+    // 14. 進食形式
+    if (answers.feeding_mode === 'assisted') totalScore += 0;
+    else if (answers.feeding_mode === 'difficult') totalScore += 1;
+    else if (answers.feeding_mode === 'independent') totalScore += 2;
+
+    // 15. 營養問題
+    if (answers.nutrition_problem === 'severe') totalScore += 0;
+    else if (answers.nutrition_problem === 'mild') totalScore += 1;
+    else if (answers.nutrition_problem === 'none') totalScore += 2;
+
+    // 16. 健康狀況比較
+    if (answers.health_comparison === 'worse') totalScore += 0;
+    else if (answers.health_comparison === 'unknown') totalScore += 0.5;
+    else if (answers.health_comparison === 'same') totalScore += 1;
+    else if (answers.health_comparison === 'better') totalScore += 2;
+
+    // 17. 臂中圍
+    if (answers.mac === 'low') totalScore += 0;
+    else if (answers.mac === 'medium') totalScore += 0.5;
+    else if (answers.mac === 'high') totalScore += 1;
+
+    // 18. 小腿圍
+    if (answers.cc === 'low') totalScore += 0;
+    else if (answers.cc === 'high') totalScore += 1;
 
     return totalScore;
   };
 
   const determineStatus = (score) => {
-    if (score >= 12) return '營養狀況良好';
-    if (score >= 8) return '可能有營養不良的風險';
+    if (score >= 24) return '營養狀況良好';
+    if (score >= 17) return '具營養不良危險性';
     return '營養不良';
   };
 
@@ -130,21 +204,29 @@ export default function Home() {
         name: '',
         gender: 'male',
         dob: '',
+        weight: '',
+        height: '',
+        kneeHeight: '',
         answers: {
           appetite: '',
           weight_change: '',
           mobility: '',
+          stress: '',
+          neuro: '',
+          bmi: '',
+          living: '',
           medication: '',
           pressure_ulcers: '',
           meals: '',
           dairy: '',
-          protein: '',
-          fruits_vegetables: '',
+          legumes: '',
+          meat: '',
+          vegetables: '',
           fluid: '',
           feeding_mode: '',
-          self_assessment: '',
+          nutrition_problem: '',
           health_comparison: '',
-          ac: '',
+          mac: '',
           cc: ''
         }
       });
@@ -225,114 +307,36 @@ export default function Home() {
                   />
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div className="card mb-4">
-            <div className="card-body">
-              <h5 className="card-title">評估項目</h5>
               <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">A. 近三個月食慾是否減退？</label>
-                  <select
-                    className="form-select"
-                    name="answers.appetite"
-                    value={formData.answers.appetite}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">請選擇</option>
-                    <option value="severe">嚴重食慾減退</option>
-                    <option value="moderate">中度食慾減退</option>
-                    <option value="none">沒有食慾減退</option>
-                  </select>
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">B. 近三個月體重減輕情況</label>
-                  <select
-                    className="form-select"
-                    name="answers.weight_change"
-                    value={formData.answers.weight_change}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">請選擇</option>
-                    <option value="severe">減輕超過3公斤</option>
-                    <option value="moderate">不知道</option>
-                    <option value="none">減輕1-3公斤</option>
-                    <option value="gain">沒有減輕</option>
-                  </select>
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">C. 活動能力</label>
-                  <select
-                    className="form-select"
-                    name="answers.mobility"
-                    value={formData.answers.mobility}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">請選擇</option>
-                    <option value="bed">臥床或輪椅</option>
-                    <option value="indoor">可以下床/離開輪椅，但不能外出</option>
-                    <option value="outdoor">可以外出</option>
-                  </select>
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">D. 近三個月是否有精神壓力或急性疾病？</label>
-                  <select
-                    className="form-select"
-                    name="answers.medication"
-                    value={formData.answers.medication}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">請選擇</option>
-                    <option value="yes">是</option>
-                    <option value="no">否</option>
-                  </select>
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">E. 神經心理問題</label>
-                  <select
-                    className="form-select"
-                    name="answers.pressure_ulcers"
-                    value={formData.answers.pressure_ulcers}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">請選擇</option>
-                    <option value="severe">嚴重失智或憂鬱</option>
-                    <option value="moderate">輕度失智</option>
-                    <option value="none">無心理問題</option>
-                  </select>
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">上臂中點圍(AC)（公分）</label>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">體重(公斤)</label>
                   <input
                     type="number"
-                    step="0.1"
                     className="form-control"
-                    name="answers.ac"
-                    value={formData.answers.ac}
+                    name="weight"
+                    value={formData.weight}
                     onChange={handleInputChange}
                     required
                   />
                 </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">小腿圍(CC)（公分）</label>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">身高(公分)</label>
                   <input
                     type="number"
-                    step="0.1"
                     className="form-control"
-                    name="answers.cc"
-                    value={formData.answers.cc}
+                    name="height"
+                    value={formData.height}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">膝高度(公分)</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    name="kneeHeight"
+                    value={formData.kneeHeight}
                     onChange={handleInputChange}
                     required
                   />
@@ -341,13 +345,355 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="text-center mb-5">
+          <div className="card mb-4">
+            <div className="card-body">
+              <h5 className="card-title">營養篩檢</h5>
+              
+              <div className="mb-3">
+                <label className="form-label">1. 過去三個月之中，是否因食慾不佳消化問題、咀嚼或吞嚥困難以致進食量越來越少？</label>
+                <select
+                  className="form-select"
+                  name="answers.appetite"
+                  value={formData.answers.appetite}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="severe">嚴重食慾不佳 (0分)</option>
+                  <option value="moderate">中度食慾不佳 (1分)</option>
+                  <option value="none">食慾無變化 (2分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">2. 近三個月體重變化</label>
+                <select
+                  className="form-select"
+                  name="answers.weight_change"
+                  value={formData.answers.weight_change}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="severe">體重減輕＞3公斤 (0分)</option>
+                  <option value="unknown">不知道 (1分)</option>
+                  <option value="moderate">體重減輕1~3公斤 (2分)</option>
+                  <option value="none">體重無改變 (3分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">3. 行動力</label>
+                <select
+                  className="form-select"
+                  name="answers.mobility"
+                  value={formData.answers.mobility}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="bed">臥床或輪椅 (0分)</option>
+                  <option value="limited">可以下床活動或離開輪椅但無法自由走動 (1分)</option>
+                  <option value="normal">可以自由走動 (2分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">4. 過去三個月內曾有精神性壓力或急性疾病發作</label>
+                <select
+                  className="form-select"
+                  name="answers.stress"
+                  value={formData.answers.stress}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="yes">是 (0分)</option>
+                  <option value="no">否 (2分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">5. 神經精神問題</label>
+                <select
+                  className="form-select"
+                  name="answers.neuro"
+                  value={formData.answers.neuro}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="severe">嚴重癡呆或抑鬱 (0分)</option>
+                  <option value="mild">輕度癡呆 (1分)</option>
+                  <option value="none">無精神問題 (2分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">6. 身體質量指數(BMI)</label>
+                <select
+                  className="form-select"
+                  name="answers.bmi"
+                  value={formData.answers.bmi}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="low">BMI＜19 (0分)</option>
+                  <option value="medium_low">19≦BMI＜21 (1分)</option>
+                  <option value="medium_high">21≦BMI＜23 (2分)</option>
+                  <option value="high">BMI≧23 (3分)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="card mb-4">
+            <div className="card-body">
+              <h5 className="card-title">一般評估</h5>
+
+              <div className="mb-3">
+                <label className="form-label">7. 可以獨立生活 (非住在護理之家或醫院)</label>
+                <select
+                  className="form-select"
+                  name="answers.living"
+                  value={formData.answers.living}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="yes">是 (1分)</option>
+                  <option value="no">否 (0分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">8. 每天需服用三種以上的處方</label>
+                <select
+                  className="form-select"
+                  name="answers.medication"
+                  value={formData.answers.medication}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="yes">是 (1分)</option>
+                  <option value="no">否 (0分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">9. 褥瘡或皮膚潰瘍</label>
+                <select
+                  className="form-select"
+                  name="answers.pressure_ulcers"
+                  value={formData.answers.pressure_ulcers}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="yes">是 (1分)</option>
+                  <option value="no">否 (0分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">10. 一天中可以吃幾餐完整的餐食</label>
+                <select
+                  className="form-select"
+                  name="answers.meals"
+                  value={formData.answers.meals}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="one">1餐 (0分)</option>
+                  <option value="two">2餐 (1分)</option>
+                  <option value="three">3餐 (2分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">11. 蛋白質攝取量</label>
+                <div className="mb-2">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="answers.dairy"
+                      checked={formData.answers.dairy === 'yes'}
+                      onChange={(e) => handleInputChange({
+                        target: {
+                          name: 'answers.dairy',
+                          value: e.target.checked ? 'yes' : 'no'
+                        }
+                      })}
+                    />
+                    <label className="form-check-label">
+                      每天至少攝取一份乳製品(牛奶、乳酪、優酪乳)
+                    </label>
+                  </div>
+                </div>
+                <div className="mb-2">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="answers.legumes"
+                      checked={formData.answers.legumes === 'yes'}
+                      onChange={(e) => handleInputChange({
+                        target: {
+                          name: 'answers.legumes',
+                          value: e.target.checked ? 'yes' : 'no'
+                        }
+                      })}
+                    />
+                    <label className="form-check-label">
+                      每周攝取兩份以上的豆類或蛋類
+                    </label>
+                  </div>
+                </div>
+                <div className="mb-2">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="answers.meat"
+                      checked={formData.answers.meat === 'yes'}
+                      onChange={(e) => handleInputChange({
+                        target: {
+                          name: 'answers.meat',
+                          value: e.target.checked ? 'yes' : 'no'
+                        }
+                      })}
+                    />
+                    <label className="form-check-label">
+                      每天均吃些肉、魚、雞、鴨類
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">12. 每天至少攝取二份或二份以上的蔬菜或水果</label>
+                <select
+                  className="form-select"
+                  name="answers.vegetables"
+                  value={formData.answers.vegetables}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="yes">是 (1分)</option>
+                  <option value="no">否 (0分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">13. 每天攝取多少液體(包括白開水、果汁、咖啡、茶、牛奶)</label>
+                <select
+                  className="form-select"
+                  name="answers.fluid"
+                  value={formData.answers.fluid}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="low">少於3杯 (0分)</option>
+                  <option value="medium">3－5杯 (0.5分)</option>
+                  <option value="high">大於5杯 (1.0分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">14. 進食的形式</label>
+                <select
+                  className="form-select"
+                  name="answers.feeding_mode"
+                  value={formData.answers.feeding_mode}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="assisted">無人協助則無法進食 (0分)</option>
+                  <option value="difficult">可以自己進食但較吃力 (1分)</option>
+                  <option value="independent">可以自己進食 (2分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">15. 他們覺得自己營養方面有沒有問題？</label>
+                <select
+                  className="form-select"
+                  name="answers.nutrition_problem"
+                  value={formData.answers.nutrition_problem}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="severe">覺得自己營養非常不好 (0分)</option>
+                  <option value="mild">不太清楚或營養不太好 (1分)</option>
+                  <option value="none">覺得自己沒有營養問題 (2分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">16. 與其他同年齡的人比較，他們認為自己的健康狀況如何？</label>
+                <select
+                  className="form-select"
+                  name="answers.health_comparison"
+                  value={formData.answers.health_comparison}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="worse">不如同年齡的人 (0分)</option>
+                  <option value="unknown">不知道 (0.5分)</option>
+                  <option value="same">和同年齡的人差不多 (1.0分)</option>
+                  <option value="better">比同年齡的人好 (2.0分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">17. 臂中圍MAC(公分)</label>
+                <select
+                  className="form-select"
+                  name="answers.mac"
+                  value={formData.answers.mac}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="low">MAC＜21 (0分)</option>
+                  <option value="medium">MAC21-21.9 (0.5分)</option>
+                  <option value="high">MAC≧22 (1.0分)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">18. 小腿圍C.C.(公分)</label>
+                <select
+                  className="form-select"
+                  name="answers.cc"
+                  value={formData.answers.cc}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">請選擇</option>
+                  <option value="low">C.C.＜31 (0分)</option>
+                  <option value="high">C.C.≧31 (1分)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="d-grid gap-2">
             <button
               type="submit"
               className="btn btn-primary"
               disabled={submitting}
             >
-              {submitting ? '提交中...' : '提交評估'}
+              {submitting ? '提交中...' : '提交評估表'}
             </button>
           </div>
         </form>
