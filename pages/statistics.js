@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -350,7 +351,12 @@ export default function Statistics() {
       </Head>
 
       <div className="container mt-5">
-        <h1 className="mb-4">MNA 評估統計</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1>MNA 評估統計</h1>
+          <Link href="/">
+            <a style={{ textDecoration: 'none', color: '#0070f3' }}>返回首頁</a>
+          </Link>
+        </div>
         
         {stats.loading ? (
           <div className="text-center">
